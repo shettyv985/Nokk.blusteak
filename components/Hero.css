@@ -1,0 +1,409 @@
+/* ════════════════════════════════════════════
+   HERO SECTION
+════════════════════════════════════════════ */
+.hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding: 150px 0 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.hero-section .text-cursor-container {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.hero-radial-glow {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 150vh;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% -10%,
+    rgba(73, 136, 196, 0.22),
+    transparent
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── inner ── */
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1100px;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  margin-top: -5vh;
+  align-items: center;
+  text-align: center;
+}
+.hero-lockup {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;   /* 🔥 KEY */
+}
+/* ════════════════════════════════════════════
+   CALLOUT PILL
+════════════════════════════════════════════ */
+.hero-callout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;      /* ✅ size to text */
+  align-self: center;      /* ✅ center inside lockup */
+
+  gap: 0.5rem;
+  font-family: "degular", sans-serif;
+  font-size: 0.96rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #fff;
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(73,136,196,0.22);
+  border-radius: 50px;
+
+  padding: 0.25rem 1rem;
+  margin-bottom: 3.9rem;
+
+  pointer-events: all;
+  cursor: pointer;
+
+  transition: border-color 0.3s, background 0.3s;
+}
+.hero-callout:hover {
+  background: rgba(73, 136, 196, 0.1);
+  border-color: rgba(73, 136, 196, 0.5);
+}
+.hero-callout-arrow { color: rgb(255, 255, 255); font-size: 1rem; }
+
+/* ════════════════════════════════════════════
+   NOKK WORDMARK — centred
+════════════════════════════════════════════ */
+.nokk-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+  margin: 0 auto 1.6rem;
+
+  line-height: 1;
+  gap: 0;
+  pointer-events: none;
+}
+
+.nokk-letter {
+  font-family: 'Averia Serif Libre', serif;
+  font-weight: 300;
+  color: #ffffff;
+  line-height: 1;
+  user-select: none;
+  letter-spacing: -0.05em;
+  text-shadow:
+    0 0 8px  rgba(73, 136, 196, 0.85),
+    0 0 24px rgba(73, 136, 196, 0.45),
+    0 0 48px rgba(15,  40,  84,  0.35);
+    
+}
+
+.nokk-eye-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: visible;
+  pointer-events: all;
+}
+
+/* ════════════════════════════════════════════
+   COPY
+════════════════════════════════════════════ */
+.hero-copy {
+  font-family: "degular", sans-serif;
+  font-style: normal;
+  font-size: clamp(1.65rem, 1.3vw, 1.1rem);
+  font-weight: 200;
+  line-height: 1.45;
+  color: rgb(255, 255, 255);
+
+  max-width: 700px;
+  margin: 1.5rem auto 3rem;
+    width: 100%;          /* 🔥 match NOKK width */
+  max-width: none;      /* remove old constraint */
+
+  margin: 1.5rem 0 3rem;
+  
+
+  text-align: center;   /* ✅ force alignment */
+}
+
+
+/* ════════════════════════════════════════════
+   SWIPEABLE CTA TRACK
+════════════════════════════════════════════ */
+.hero-cta-track-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  overflow: hidden;
+  width: 14rem;          /* show one button at a time */
+  pointer-events: all;
+  cursor: grab;
+}
+.hero-cta-track-wrap:active { cursor: grabbing; }
+
+.hero-cta-track {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  transition: transform 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  user-select: none;
+  will-change: transform;
+}
+
+/* ── Single button ── */
+.hero-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 13rem;
+  flex-shrink: 0;
+  padding: 0.18rem;
+  border-radius: 4rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(73, 136, 196, 0.28);
+  backdrop-filter: blur(10px);
+  text-decoration: none;
+  overflow: hidden;
+  transition: border-color 0.4s ease;
+}
+.hero-btn:hover { border-color: rgba(73, 136, 196, 0.65); }
+
+/* expanding fill */
+.hero-btn-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 4rem;
+  background: rgba(73, 136, 196, 0.14);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.076, 1);
+}
+.hero-btn--hovered .hero-btn-circle { transform: scaleX(1); }
+
+/* arrow circle */
+.hero-btn-arrow {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: rgba(73, 136, 196, 0.22);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.076, 1), background 0.4s;
+}
+.hero-btn--hovered .hero-btn-arrow {
+  transform: translateX(0.3rem);
+  background: rgba(73, 136, 196, 0.5);
+}
+
+/* label */
+.hero-btn-label {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  text-align: center;
+  font-family: "degular", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  color: rgba(225, 235, 255, 0.85);
+  white-space: nowrap;
+  padding-right: 0.4rem;
+  transition: color 0.4s;
+}
+.hero-btn--hovered .hero-btn-label { color: #fff; }
+
+/* ── Dot indicators ── */
+.hero-cta-dots {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.hero-cta-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(73, 136, 196, 0.3);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.3s, transform 0.3s;
+}
+.hero-cta-dot--active {
+  background: rgba(73, 136, 196, 0.9);
+  transform: scale(1.4);
+}
+
+/* ════════════════════════════════════════════
+   TRAIL WORDS
+════════════════════════════════════════════ */
+.hero-section .text-cursor-item {
+  font-family: "degular", sans-serif !important;
+  font-size: clamp(0.6rem, 1.1vw, 0.9rem) !important;
+  font-weight: 300 !important;
+  color: rgba(255, 255, 255, 0.288) !important;
+  white-space: nowrap !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  pointer-events: none !important;
+  background: none !important;
+  text-shadow: 0 0 10px rgba(73, 136, 196, 0.25) !important;
+}
+
+/* ════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════ */
+@media (max-width: 800px) {
+  .hero-section { padding: 110px 0 60px; }
+  .hero-inner { padding: 0 1.5rem; margin-top: -2vh; }
+  .hero-copy { font-size: 0.95rem; max-width: 100%; }
+  .hero-callout { margin-bottom: 3.5rem; }
+  .nokk-row { margin-bottom: 1.2rem; }
+}
+
+@media (max-width: 480px) {
+  .hero-section { padding: 0px 0 40px; }
+  .hero-inner { padding: 0 1.25rem; margin-top: 0; }
+  .hero-callout { font-size: 0.68rem; margin-bottom: 2.8rem; }
+  .nokk-row { margin-bottom: 1rem; }
+  .hero-copy { font-size: 0.88rem; margin-bottom: 2rem; }
+  .hero-btn { width: 12rem; }
+  .slide-track { width: 240px; }
+}
+
+@media (max-width: 360px) {
+  .hero-section { padding: 80px 0 30px; }
+  .hero-inner { padding: 0 1rem; }
+  .hero-callout { font-size: 0.62rem; padding: 0.2rem 0.7rem; }
+  .slide-track { width: 210px; }
+}
+
+/* ════════════════════════════════════════════
+   SLIDE-TO-START  (iOS answer button style)
+════════════════════════════════════════════ */
+.slide-track {
+  position: relative;
+  width: 280px;
+  height: 56px;
+  border-radius: 56px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(73, 136, 196, 0.3);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  pointer-events: all;
+  transition: border-color 0.3s;
+}
+.slide-track:active { cursor: grabbing; }
+.slide-track--done {
+  border-color: rgb(255, 255, 255);
+  border-width: 0.2px;
+  cursor: default;
+}
+
+/* Blue fill that grows with drag */
+.slide-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 56px;
+  background: rgba(73, 137, 196, 0.308);
+  pointer-events: none;
+  transition: width 0.05s linear;
+}
+
+/* Fading label */
+.slide-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 40px; /* offset so text doesn't hide behind thumb */
+  font-family: "degular", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  color: rgb(255, 255, 255);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Thumb — the draggable circle */
+.slide-thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 16px rgba(73, 136, 196, 0.5);
+  z-index: 2;
+  will-change: transform;
+}
+.slide-thumb--dragging {
+  box-shadow: 0 4px 24px rgba(73, 136, 196, 0.7);
+}
+.slide-thumb--done {
+  background: rgb(255, 255, 255);
+  box-shadow: 0 4px 24px rgb(255, 255, 255);
+}
+
+.slide-thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 16px rgba(73, 136, 196, 0.5);
+  z-index: 2;
+  will-change: transform;
+}

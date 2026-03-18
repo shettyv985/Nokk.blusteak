@@ -1,0 +1,56 @@
+.sv-section {
+  width: 100%;
+  background: #000;
+  overflow: hidden;
+  /* remove any default bottom gap */
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.sv-parallax {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background: #000;
+  padding: 0.5rem 0;
+}
+
+.sv-scroller {
+  display: flex;
+  white-space: nowrap;
+  font-family: "degular", sans-serif;
+  font-size: clamp(1.6rem, 4vw, 3.2rem);
+  font-weight: 2500;
+  line-height: 1.15;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ffffff;
+  padding: 0.25em 0;
+  will-change: transform;
+}
+
+.sv-scroller span {
+  flex-shrink: 0;
+  padding-right: 0.6em;
+}
+
+.sv-scroller span::after {
+  
+  opacity: 0.3;
+  margin-left: 0.3em;
+}
+
+.scroll-velocity-text {
+  letter-spacing: 0.04em;
+}
+
+/* Remove any bottom breathing room on mobile */
+@media (max-width: 1024px) {
+  .sv-section {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .sv-parallax:last-child {
+    padding-bottom: 0;
+  }
+}

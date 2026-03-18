@@ -1,0 +1,35 @@
+.lanyard-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.lanyard-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 5%,
+    #0F2854 25%,
+    #1a3d6e 50%,
+    #0F2854 75%,
+    transparent 95%
+  );
+  z-index: 10;
+  box-shadow: 0 0 16px rgba(15, 40, 84, 0.6);
+}
+
+.lanyard-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+
+.lanyard-canvas:active {
+  cursor: grabbing;
+}
