@@ -197,7 +197,7 @@ function EscapingTag({
 /* ─────────────────────────────────────────────────────
    Tags wrapper — scroll reveal stagger
 ───────────────────────────────────────────────────── */
-function FallingTags({ sectionRef }: { sectionRef: React.RefObject<HTMLElement> }) {
+function FallingTags({ sectionRef }: { sectionRef: React.RefObject<HTMLElement | null> }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
