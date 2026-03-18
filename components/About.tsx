@@ -56,7 +56,7 @@ function EscapingTag({
   sectionRef,
 }: {
   label: string;
-  sectionRef: React.RefObject<HTMLElement>;
+  sectionRef: React.RefObject<HTMLElement | null>;
 }) {
   const pillRef        = useRef<HTMLDivElement>(null);
   const placeholderRef = useRef<HTMLDivElement>(null);
