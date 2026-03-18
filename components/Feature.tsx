@@ -147,7 +147,7 @@ export default function Feature() {
   }, [isMobile]);
 
   /* ── choose src on client only to avoid SSR/hydration mismatch ── */
-  const videoSrc = mounted ? (isMobile ? "/mobs.mp4" : "/laps.mp4") : null;
+  const videoSrc = mounted ? (isMobile ? "https://res.cloudinary.com/dokevrdbt/video/upload/v1773855133/mobs_avj0od.mp4" : "https://res.cloudinary.com/dokevrdbt/video/upload/v1773854344/laps_w0fwqa.mp4") : null;
 
   return (
     <div
@@ -167,6 +167,7 @@ export default function Feature() {
           muted
           playsInline
           preload="auto"
+          crossOrigin="anonymous"
           disablePictureInPicture
           disableRemotePlayback
         >
