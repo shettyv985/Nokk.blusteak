@@ -48,7 +48,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     scaleY: "100%",
     duration: 0.5,                                        // was 1
     onComplete: () =>
-      gsap.to(".pre-divider", { opacity: 0, duration: 0.2, delay: 0.15 }),  // was 0.3 / 0.3
+      {gsap.to(".pre-divider", { opacity: 0, duration: 0.2, delay: 0.15 });},
+  // was 0.3 / 0.3
   });
 
   tl.to(".pre-eye-lid-right", {
