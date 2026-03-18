@@ -34,8 +34,9 @@ export default function Feature() {
   const containerRef = useRef<HTMLDivElement>(null);
   const ballRef      = useRef<HTMLDivElement>(null);
   const videoRef     = useRef<HTMLVideoElement>(null);
-  const [hovering, setHovering]   = useState(false);
-  const [isMobile, setIsMobile]   = useState(false);
+  const [hovering, setHovering] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mounted,  setMounted]  = useState(false);   // defer src until client
   const mouse   = useRef({ x: 0, y: 0 });
   const current = useRef({ x: 0, y: 0 });
   const raf     = useRef<number>(0);
@@ -44,14 +45,47 @@ export default function Feature() {
   const BALL = 220;
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-  // Detect mobile on mount and on resize
+  /* ── detect mobile, defer to client ── */
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 768);
     check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
+    setMounted(true);
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, []);
 
+  /* ── play video whenever src changes ── */
+  useEffect(() => {
+    if (!mounted) return;
+    const vid = videoRef.current;
+    if (!vid) return;
+
+    vid.muted    = true;
+    vid.autoplay = true;
+    vid.loop     = true;
+
+    /* load the new source then play */
+    vid.load();
+
+    const attempt = () => {
+      vid.play().catch(() => {
+        /* on iOS, retry on first user gesture */
+        const retry = () => { vid.play(); };
+        document.addEventListener("touchstart", retry, { once: true });
+        document.addEventListener("click",      retry, { once: true });
+      });
+    };
+
+    if (vid.readyState >= 2) {
+      attempt();
+    } else {
+      vid.addEventListener("canplay", attempt, { once: true });
+    }
+  }, [mounted, isMobile]); /* re-run when source switches */
+
+  useEffect(() => () => cancelAnimationFrame(raf.current), []);
+
+  /* ── ball animation ── */
   const loop = useCallback(() => {
     current.current.x = lerp(current.current.x, mouse.current.x, 0.08);
     current.current.y = lerp(current.current.y, mouse.current.y, 0.08);
@@ -77,7 +111,7 @@ export default function Feature() {
       if (Math.abs(current.current.x - tx) > 0.5 || Math.abs(current.current.y - ty) > 0.5) {
         raf.current = requestAnimationFrame(tick);
       } else {
-        if (ballRef.current) ballRef.current.removeAttribute('style');
+        if (ballRef.current) ballRef.current.removeAttribute("style");
       }
     };
     raf.current = requestAnimationFrame(tick);
@@ -90,9 +124,9 @@ export default function Feature() {
     setHovering(true);
     if (!containerRef.current || !ballRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    ballRef.current.style.right = 'auto';
-    ballRef.current.style.left  = '0';
-    ballRef.current.style.top   = '0';
+    ballRef.current.style.right = "auto";
+    ballRef.current.style.left  = "0";
+    ballRef.current.style.top   = "0";
     current.current = { x: rect.width - 88, y: 55 };
     mouse.current   = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     raf.current = requestAnimationFrame(loop);
@@ -112,25 +146,8 @@ export default function Feature() {
     mouse.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
   }, [isMobile]);
 
-  // Force play on iOS — autoPlay alone is not always enough
-  useEffect(() => {
-    const vid = videoRef.current;
-    if (!vid) return;
-    vid.muted = true;
-    const attempt = () => {
-      vid.play().catch(() => {
-        // Retry once on next user interaction if blocked
-        document.addEventListener('touchstart', () => vid.play(), { once: true });
-      });
-    };
-    if (vid.readyState >= 2) {
-      attempt();
-    } else {
-      vid.addEventListener('canplay', attempt, { once: true });
-    }
-  }, [isMobile]); // re-run when source switches mobile ↔ desktop
-
-  useEffect(() => () => cancelAnimationFrame(raf.current), []);
+  /* ── choose src on client only to avoid SSR/hydration mismatch ── */
+  const videoSrc = mounted ? (isMobile ? "/mobs.mp4" : "/laps.mp4") : null;
 
   return (
     <div
@@ -140,11 +157,10 @@ export default function Feature() {
       onMouseLeave={onLeave}
       onMouseMove={onMove}
     >
-      {/* ── Video ── */}
+      {/* ── Video — NO key prop, src swapped via <source> + vid.load() ── */}
       <div className="feature-video-placeholder">
         <video
           ref={videoRef}
-          key={isMobile ? "mobile" : "desktop"}
           className="feature-video"
           autoPlay
           loop
@@ -153,13 +169,8 @@ export default function Feature() {
           preload="auto"
           disablePictureInPicture
           disableRemotePlayback
-          webkit-playsinline="true"
-          x5-playsinline="true"
         >
-          {isMobile
-            ? <source src="/mobs.mp4" type="video/mp4" />
-            : <source src="/laps.mp4" type="video/mp4" />
-          }
+          {videoSrc && <source src={videoSrc} type="video/mp4" />}
         </video>
       </div>
 
