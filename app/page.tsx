@@ -11,12 +11,13 @@ import ScrollMarquee from '../components/ScrollMarquee';
 import FeaturedProjectsSection from '../components/FeaturedProjects';
 import ScrollCards from '../components/ScrollCards';
 import Footer from '../components/Footer';
+import SmoothScroll from '../components/SmoothScroll';
 
 const menuItems = [
-  { label: 'Home',     ariaLabel: 'Go to home page',    link: '/' },
-  { label: 'About',    ariaLabel: 'Learn about us',      link: '#about' },
+  { label: 'Home',     ariaLabel: 'Go to home page',  link: '/' },
+  { label: 'About',    ariaLabel: 'Learn about us',    link: '#about' },
   { label: 'Features', ariaLabel: 'View our services', link: '#features' },
-  { label: 'Contact',  ariaLabel: 'Get in touch',        link: '#contact' },
+  { label: 'Contact',  ariaLabel: 'Get in touch',      link: '#contact' },
 ];
 
 const socialItems = [
@@ -29,7 +30,7 @@ export default function Home() {
   const [done, setDone] = useState(false);
 
   return (
-    <>
+    <SmoothScroll>
       {!done && <Preloader onComplete={() => setDone(true)} />}
 
       {/* Fixed background grain */}
@@ -76,13 +77,9 @@ export default function Home() {
 
       {/* Hero */}
       <div style={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        zIndex: 2,
+        width: '100vw', height: '100vh',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        position: 'relative', zIndex: 2,
       }}>
         <Hero />
       </div>
@@ -96,12 +93,9 @@ export default function Home() {
 
       {/* ScrollVelocity */}
       <div style={{
-        overflowX: 'clip',
-        width: '100vw',
-        position: 'relative',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 2,
+        overflowX: 'clip', width: '100vw',
+        position: 'relative', left: '50%',
+        transform: 'translateX(-50%)', zIndex: 2,
       }}>
         <ScrollVelocity
           texts={['EYES OPEN ✦ ALWAYS WATCHING ✦ BRAND SAFE ✦ ZERO MISSES ✦ BUILT DIFFERENT ✦ STAYS SHARP ✦ NEVER SLEEPS ✦', 'Every Project ✦ Your Stack ✦ Your Rules ✦']}
@@ -111,7 +105,7 @@ export default function Home() {
         />
       </div>
 
-      {/* What We Do — id="what-we-do" so the About menu link scrolls here */}
+      {/* About */}
       <div id="about" style={{ position: 'relative', zIndex: 2, width: '100%' }}>
         <WhatWeDo />
       </div>
@@ -121,25 +115,27 @@ export default function Home() {
         <ScrollMarquee />
       </div>
 
-      {/* FeaturedProjects — sticky card stack, right after ScrollMarquee */}
+      {/* FeaturedProjects */}
       <div id="features" style={{ position: 'relative', zIndex: 2, width: '100%' }}>
-  <FeaturedProjectsSection />
-</div>
+        <FeaturedProjectsSection />
+      </div>
 
       {/* ScrollMarquee */}
       <div style={{ position: 'relative', zIndex: 2, width: '100%' }}>
         <ScrollMarquee />
       </div>
 
-      {/* ScrollCards — pinned horizontal scroll, after FeaturedProjects */}
+      {/* ScrollCards */}
       <div style={{ position: 'relative', zIndex: 2, width: '100%' }}>
         <ScrollCards />
       </div>
+
       {/* ScrollMarquee */}
       <div style={{ position: 'relative', zIndex: 2, width: '100%' }}>
         <ScrollMarquee />
       </div>
+
       <Footer />
-    </>
+    </SmoothScroll>
   );
 }
