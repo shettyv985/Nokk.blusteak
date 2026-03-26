@@ -4,8 +4,8 @@ const featuredProjectsContent = [
     title: "QC & Brand Compliance",
     description:
       "NOKK evaluates content and visual creatives against your defined standards. It identifies quality issues, alignment gaps, and inconsistencies, then shares structured feedback directly within your project management tool.",
-    image: "/1.png",
-    hoverImage: "/1.png",
+    image: "/90867.jpg",
+    hoverImage: "/90867.jpg",
     
   },
   {
