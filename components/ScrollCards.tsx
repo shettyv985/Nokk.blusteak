@@ -17,11 +17,11 @@ const EMAILJS_PUBLIC_KEY  = "9Ux6ahR7KBpx2znQH";
    SCROLL CARDS DATA
 ══════════════════════════════════════════════════════════ */
 const CARDS = [
-  { image: "/Image.png" },
-  { image: "https://picsum.photos/seed/nokk-sc2/600/400" },
-  { image: "https://picsum.photos/seed/nokk-sc3/600/400" },
-  { image: "https://picsum.photos/seed/nokk-sc4/600/400" },
-  { image: "https://picsum.photos/seed/nokk-sc5/600/400" },
+  { image: "/1.png" },
+  { image: "/2.png" },
+  { image: "/3.png" },
+  { image: "/4.png" },
+  { image: "/5.png" },
 ];
 
 const TRANSFORMS = [
