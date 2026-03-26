@@ -12,8 +12,8 @@ const featuredProjectsContent = [
     title: "Project Memory",
     description:
       "Nokk retains the full history of every project — every QC result, revision, score, and change over time. Before/after comparisons are instant, recurring issues are visible, and your audit trail writes itself.",
-    image: "/2.png",
-    hoverImage: "/2.png",
+    image: "/e.png",
+    hoverImage: "/e.png",
   },
   {
     info: "Right person. Right time. Every time.",
