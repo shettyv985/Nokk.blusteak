@@ -27,16 +27,21 @@ export function PixelHover({
   const trailRef = useRef<{ col: number; row: number }[]>([]);
 
   const redrawCell = useCallback((
-    ctx: CanvasRenderingContext2D,
-    col: number, row: number
-  ) => {
-    const off = offscreenRef.current;
-    if (!off) return;
-    const ps = pixelSize;
-    ctx.globalCompositeOperation = "source-over";
-    ctx.globalAlpha = 1;
-    ctx.drawImage(off, col * ps, row * ps, ps, ps, col * ps, row * ps, ps, ps);
-  }, [pixelSize]);
+  ctx: CanvasRenderingContext2D,
+  col: number, row: number
+) => {
+  const off = offscreenRef.current;
+  if (!off) return;
+  const ps = pixelSize;
+  const dpr = window.devicePixelRatio || 1;
+  ctx.globalCompositeOperation = "source-over";
+  ctx.globalAlpha = 1;
+  ctx.drawImage(
+    off,
+    col * ps * dpr, row * ps * dpr, ps * dpr, ps * dpr,
+    col * ps,       row * ps,       ps,        ps
+  );
+}, [pixelSize]);
 
   const eraseBlock = useCallback((
     ctx: CanvasRenderingContext2D,
@@ -70,39 +75,50 @@ export function PixelHover({
   }, [redrawCell]);
 
   const init = useCallback(() => {
-    const canvas = canvasRef.current;
-    const wrap   = wrapRef.current;
-    if (!canvas || !wrap) return;
-    const parent = wrap.parentElement as HTMLElement;
-    const w = (parent || wrap).offsetWidth;
-    const h = (parent || wrap).offsetHeight;
-    if (!w || !h) return;
+  const canvas = canvasRef.current;
+  const wrap   = wrapRef.current;
+  if (!canvas || !wrap) return;
+  const parent = wrap.parentElement as HTMLElement;
+  const w = (parent || wrap).offsetWidth;
+  const h = (parent || wrap).offsetHeight;
+  if (!w || !h) return;
 
-    canvas.width  = w;
-    canvas.height = h;
-    colsRef.current = Math.ceil(w / pixelSize);
-    rowsRef.current = Math.ceil(h / pixelSize);
-    trailRef.current = [];
+  const dpr = window.devicePixelRatio || 1;
 
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = src;
-    const paint = () => {
-      const off = document.createElement("canvas");
-      off.width  = w;
-      off.height = h;
-      off.getContext("2d")!.drawImage(img, 0, 0, w, h);
-      offscreenRef.current = off;
-      const ctx = canvas.getContext("2d")!;
-      ctx.globalCompositeOperation = "source-over";
-      ctx.globalAlpha = 1;
-      ctx.clearRect(0, 0, w, h);
-      ctx.drawImage(off, 0, 0, w, h);
-      loadedRef.current = true;
-    };
-    img.onload = paint;
-    if (img.complete) paint();
-  }, [src, pixelSize]);
+  canvas.width  = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width  = `${w}px`;
+  canvas.style.height = `${h}px`;
+
+  colsRef.current = Math.ceil(w / pixelSize);
+  rowsRef.current = Math.ceil(h / pixelSize);
+  trailRef.current = [];
+
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.src = src;
+
+  const paint = () => {
+    const off = document.createElement("canvas");
+    off.width  = w * dpr;
+    off.height = h * dpr;
+
+    const offCtx = off.getContext("2d")!;
+    offCtx.scale(dpr, dpr);
+    offCtx.drawImage(img, 0, 0, w, h);
+    offscreenRef.current = off;
+
+    const ctx = canvas.getContext("2d")!;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); // reset before scaling
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(off, 0, 0, w, h);
+    loadedRef.current = true;
+  };
+
+  img.onload = paint;
+  if (img.complete) paint();
+}, [src, pixelSize]);
 
   useEffect(() => {
     init();
