@@ -36,9 +36,6 @@ const TRANSFORMS = [
    CONTACT — helpers
 ══════════════════════════════════════════════════════════ */
 
-
-
-
 /* Floating label field */
 function Field({ label, type = "text", as = "input", value, onChange, index = 0 }:
   { label: string; type?: string; as?: "input"|"textarea"; value: string; onChange:(v:string)=>void; index?:number }) {
@@ -63,7 +60,6 @@ function Field({ label, type = "text", as = "input", value, onChange, index = 0 
   );
 }
 
-
 /* Toast */
 function Toast({ state }: { state: "idle"|"sending"|"success"|"error" }) {
   if (state === "idle" || state === "sending") return null;
@@ -81,6 +77,8 @@ function Toast({ state }: { state: "idle"|"sending"|"success"|"error" }) {
 ══════════════════════════════════════════════════════════ */
 function ContactSection() {
   const [name,    setName]    = useState("");
+  const [agency,  setAgency]  = useState("");
+  const [phone,   setPhone]   = useState("");
   const [email,   setEmail]   = useState("");
   const [message, setMessage] = useState("");
   const [status,  setStatus]  = useState<"idle"|"sending"|"success"|"error">("idle");
@@ -100,7 +98,6 @@ function ContactSection() {
         (window.innerHeight - rect.top) / (rect.height + window.innerHeight)
       ));
       line.style.transform = `scaleY(${p})`;
-      /* move glow to sit at the tip of the filled line */
       if (glow) {
         const tipY = p * section.offsetHeight;
         glow.style.top = `${tipY - 80}px`;
@@ -112,11 +109,17 @@ function ContactSection() {
   }, []);
 
   const validate = () => {
-    if (!name.trim() || !email.trim() || !message.trim()) {
+    if (!name.trim() || !agency.trim() || !phone.trim() || !email.trim() || !message.trim()) {
       alert("Please fill in all fields."); return false;
     }
     if (name.trim().length < 2 || /^[^a-zA-Z]+$/.test(name.trim())) {
       alert("Please enter a valid name."); return false;
+    }
+    if (agency.trim().length < 2) {
+      alert("Please enter a valid agency name."); return false;
+    }
+    if (!/^\+?[\d\s\-().]{7,20}$/.test(phone.trim())) {
+      alert("Please enter a valid phone number."); return false;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
       alert("Please enter a valid email."); return false;
@@ -149,11 +152,18 @@ function ContactSection() {
     try {
       const emailjs = await import("@emailjs/browser");
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID,
-        { from_name: name.trim(), from_email: email.trim(), message: message.trim(), reply_to: email.trim() },
+        {
+          from_name:    name.trim(),
+          agency_name:  agency.trim(),
+          phone_number: phone.trim(),
+          from_email:   email.trim(),
+          message:      message.trim(),
+          reply_to:     email.trim(),
+        },
         { publicKey: EMAILJS_PUBLIC_KEY }
       );
       setStatus("success");
-      setName(""); setEmail(""); setMessage("");
+      setName(""); setAgency(""); setPhone(""); setEmail(""); setMessage("");
     } catch { setStatus("error"); }
     finally { setTimeout(() => setStatus("idle"), 4000); }
   };
@@ -173,7 +183,7 @@ function ContactSection() {
           <span className="ct-hero-eyebrow">It starts here</span>
           <h1 className="ct-hero-h1">
             Let nothing<br />
-            slip.Start<br />
+            slip. Start<br />
             Nokk.
           </h1>
           <p className="ct-hero-sub">
@@ -191,8 +201,10 @@ function ContactSection() {
             </div>
             <div className="ct-fields">
               <Field label="Your name"     value={name}    onChange={setName}    index={0} />
-              <Field label="Email address" type="email"    value={email}   onChange={setEmail}   index={1} />
-              <Field label="Message"       as="textarea"   value={message} onChange={setMessage} index={2} />
+              <Field label="Agency name"   value={agency}  onChange={setAgency}  index={1} />
+              <Field label="Phone number"  type="tel"      value={phone}   onChange={setPhone}   index={2} />
+              <Field label="Email address" type="email"    value={email}   onChange={setEmail}   index={3} />
+              <Field label="Message"       as="textarea"   value={message} onChange={setMessage} index={4} />
             </div>
             <button
               className={`ct-submit ${status === "sending" ? "ct-submit--sending" : ""}`}
@@ -211,7 +223,6 @@ function ContactSection() {
               <div className="ct-submit-bg" />
             </button>
           </div>
-
         </div>
 
       </div>
