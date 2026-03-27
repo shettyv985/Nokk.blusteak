@@ -69,53 +69,40 @@ export function PixelHover({
     }
   }, [redrawCell]);
 
-const init = useCallback(() => {
-  const canvas = canvasRef.current;
-  const wrap   = wrapRef.current;
-  if (!canvas || !wrap) return;
-  const parent = wrap.parentElement as HTMLElement;
-  const w = (parent || wrap).offsetWidth;
-  const h = (parent || wrap).offsetHeight;
-  if (!w || !h) return;
+  const init = useCallback(() => {
+    const canvas = canvasRef.current;
+    const wrap   = wrapRef.current;
+    if (!canvas || !wrap) return;
+    const parent = wrap.parentElement as HTMLElement;
+    const w = (parent || wrap).offsetWidth;
+    const h = (parent || wrap).offsetHeight;
+    if (!w || !h) return;
 
-  const dpr = window.devicePixelRatio || 1; // ← add this
+    canvas.width  = w;
+    canvas.height = h;
+    colsRef.current = Math.ceil(w / pixelSize);
+    rowsRef.current = Math.ceil(h / pixelSize);
+    trailRef.current = [];
 
-  // Physical pixel dimensions
-  canvas.width  = w * dpr;
-  canvas.height = h * dpr;
-
-  // CSS size stays the same (so layout doesn't change)
-  canvas.style.width  = `${w}px`;
-  canvas.style.height = `${h}px`;
-
-  colsRef.current = Math.ceil(w / pixelSize);
-  rowsRef.current = Math.ceil(h / pixelSize);
-  trailRef.current = [];
-
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.src = src;
-
-  const paint = () => {
-    const off = document.createElement("canvas");
-    off.width  = w * dpr; // ← physical pixels
-    off.height = h * dpr;
-
-    const offCtx = off.getContext("2d")!;
-    offCtx.scale(dpr, dpr); // ← scale context so drawImage works in CSS px
-    offCtx.drawImage(img, 0, 0, w, h);
-    offscreenRef.current = off;
-
-    const ctx = canvas.getContext("2d")!;
-    ctx.scale(dpr, dpr); // ← scale main canvas context too
-    ctx.clearRect(0, 0, w, h);
-    ctx.drawImage(off, 0, 0, w, h); // ← now draws at full sharpness
-    loadedRef.current = true;
-  };
-
-  img.onload = paint;
-  if (img.complete) paint();
-}, [src, pixelSize]);
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = src;
+    const paint = () => {
+      const off = document.createElement("canvas");
+      off.width  = w;
+      off.height = h;
+      off.getContext("2d")!.drawImage(img, 0, 0, w, h);
+      offscreenRef.current = off;
+      const ctx = canvas.getContext("2d")!;
+      ctx.globalCompositeOperation = "source-over";
+      ctx.globalAlpha = 1;
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(off, 0, 0, w, h);
+      loadedRef.current = true;
+    };
+    img.onload = paint;
+    if (img.complete) paint();
+  }, [src, pixelSize]);
 
   useEffect(() => {
     init();
