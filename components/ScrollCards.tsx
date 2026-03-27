@@ -88,25 +88,43 @@ function ContactSection() {
 
   /* scroll-driven vertical line + glow follower */
   useEffect(() => {
-    const section = sectionRef.current;
-    const line    = lineRef.current;
-    const glow    = glowRef.current;
-    if (!section || !line) return;
-    const onScroll = () => {
-  const rect = section.getBoundingClientRect();
-  const p = Math.max(0, Math.min(1,
-    (window.innerHeight - rect.top) / (rect.height - window.innerHeight * 0.1)
-  ));
-  line.style.transform = `scaleY(${p})`;
-  if (glow) {
-    const tipY = p * section.offsetHeight;
-    glow.style.top = `${tipY - 80}px`;
-  }
-};
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const section = sectionRef.current;
+  const line    = lineRef.current;
+  const glow    = glowRef.current;
+  if (!section || !line) return;
+
+  let current = 0;
+  let target  = 0;
+  let raf     = 0;
+
+  const onScroll = () => {
+    const rect = section.getBoundingClientRect();
+    target = Math.max(0, Math.min(1,
+      (window.innerHeight - rect.top) / (rect.height - window.innerHeight * 0.1)
+    ));
+  };
+
+  const tick = () => {
+    // lerp — 0.04 = slow/laggy flow, increase for faster catch-up
+    current += (target - current) * 0.04;
+
+    line.style.transform = `scaleY(${current})`;
+    if (glow) {
+      const tipY = current * section.offsetHeight;
+      glow.style.top = `${tipY - 80}px`;
+    }
+    raf = requestAnimationFrame(tick);
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  raf = requestAnimationFrame(tick);
+
+  return () => {
+    window.removeEventListener("scroll", onScroll);
+    cancelAnimationFrame(raf);
+  };
+}, []);
 
   const validate = () => {
     if (!name.trim() || !agency.trim() || !phone.trim() || !email.trim() || !message.trim()) {
