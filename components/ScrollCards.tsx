@@ -93,16 +93,16 @@ function ContactSection() {
     const glow    = glowRef.current;
     if (!section || !line) return;
     const onScroll = () => {
-      const rect = section.getBoundingClientRect();
-      const p = Math.max(0, Math.min(1,
-        (window.innerHeight - rect.top) / (rect.height + window.innerHeight)
-      ));
-      line.style.transform = `scaleY(${p})`;
-      if (glow) {
-        const tipY = p * section.offsetHeight;
-        glow.style.top = `${tipY - 80}px`;
-      }
-    };
+  const rect = section.getBoundingClientRect();
+  const p = Math.max(0, Math.min(1,
+    (window.innerHeight - rect.top) / (rect.height - window.innerHeight * 0.1)
+  ));
+  line.style.transform = `scaleY(${p})`;
+  if (glow) {
+    const tipY = p * section.offsetHeight;
+    glow.style.top = `${tipY - 80}px`;
+  }
+};
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
