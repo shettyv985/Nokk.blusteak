@@ -17,7 +17,7 @@ const EMAILJS_PUBLIC_KEY  = "9Ux6ahR7KBpx2znQH";
    SCROLL CARDS DATA
 ══════════════════════════════════════════════════════════ */
 const CARDS = [
-  { image: "/Evaluat.png" },
+  { image: "/1.png" },
   { image: "/2.png" },
   { image: "/3.png" },
   { image: "/4.png" },
