@@ -21,9 +21,8 @@ const menuItems = [
 ];
 
 const socialItems = [
-  { label: 'Twitter',  link: 'https://twitter.com' },
-  { label: 'GitHub',   link: 'https://github.com' },
-  { label: 'LinkedIn', link: 'https://linkedin.com' },
+  { label: 'Instagram',  link: 'https://www.instagram.com/blusteak/' },
+  { label: 'LinkedIn', link: 'https://in.linkedin.com/company/blusteak' },
 ];
 
 export default function Home() {

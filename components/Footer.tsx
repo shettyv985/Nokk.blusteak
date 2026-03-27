@@ -272,10 +272,10 @@ export default function Footer() {
 
               {/* social icons */}
               <div className="ft-socials">
-                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="ft-social-icon" aria-label="LinkedIn">
+                <a href="https://in.linkedin.com/company/blusteak" target="_blank" rel="noreferrer" className="ft-social-icon" aria-label="LinkedIn">
                   <img src="/linkedin.svg" alt="LinkedIn" width="20" height="20" />
                 </a>
-                <a href="#" className="ft-social-icon" aria-label="Instagram">
+                <a href="https://www.instagram.com/blusteak/" className="ft-social-icon" aria-label="Instagram">
                   <img src="/insta.svg" alt="Instagram" width="20" height="20" />
                 </a>
               </div>
